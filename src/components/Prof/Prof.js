@@ -16,7 +16,51 @@ const Prof = () => {
     const [selectProduct, setSelectProduct] = useState([])
     const products = GetProducts();
 
+    const [option, setOption] = useState()
+
+    function handleChange(event) {
+        setOption(event.target.value)
+    }
+
     const navigate = useNavigate();
+
+    const productInfo = (event) => {
+
+
+        event.preventDefault();
+
+        const form = event.target;
+
+        const name = form.name.value;
+        const rentPrice = form.rentPrice.value;
+        const price = form.price.value;
+        const img = form.image.value;
+        const category = option;
+        const seller = personInfo.name;
+        const sellerinfo = seller;
+
+        const data = { name, rentPrice, price, img, category, seller, sellerinfo };
+        form.reset();
+
+        fetch('http://localhost:4000/userproduct', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+
+
+    }
 
 
     useEffect(() => {
@@ -125,7 +169,7 @@ const Prof = () => {
                                                 <div className='col-md-12'>
 
                                                     <h4 style={{ color: "red", marginTop: "20px" }}>Post Your Product</h4>
-                                                    <form className='login'>
+                                                    <form className='login' onSubmit={productInfo}>
                                                         <input type="text" name="name" className="form-controll" placeholder='Product name' required />
                                                         <br />
                                                         <input type="number" name="rentPrice" className="form-controll" placeholder='Rent Price' required />
@@ -136,14 +180,14 @@ const Prof = () => {
                                                         <br />
                                                         <label for="cars">Choose a Category  :  </label>
 
-                                                        <select id="cars" className='form-controll'>
-                                                            <option value="volvo">mobile</option>
-                                                            <option value="saab">laptop</option>
-                                                            <option value="opel">home appliance</option>
-                                                            <option value="audi">doll</option>
+                                                        <select id="cars" className='form-controll' onChange={handleChange}>
+                                                            <option value="mobile">mobile</option>
+                                                            <option value="laptop">laptop</option>
+                                                            <option value="home appliance">home appliance</option>
+                                                            <option value="doll">doll</option>
                                                         </select>
-                                                        <br/>
-                                                        <br/>
+                                                        <br />
+                                                        <br />
                                                         <input type="submit" value="Submit" className='btn btn-danger' />
                                                     </form>
                                                 </div>
